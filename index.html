@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Bike Movement Simulator</title>
+    <script src="bike.js"></script>
+</head>
+<body>
+<h1>Bike Movement Simulator</h1>
+<label for="command-input">Enter command:</label>
+<input type="text" id="command-input">
+<button id="submit-button">Submit</button>
+<br>
+<label for="output-textarea">Output:</label>
+<textarea id="output-textarea" cols="50" rows="10" readonly></textarea>
+
+<script>
+    const commandInput = document.getElementById('command-input');
+    const submitButton = document.getElementById('submit-button');
+    const outputTextarea = document.getElementById('output-textarea');
+
+    const bike = new Bike();
+
+    submitButton.addEventListener('click', () => {
+        const command = commandInput.value.trim().toUpperCase();
+        commandInput.value = '';
+
+        if (command.startsWith('PLACE')) {
+            const args = command.substring(6).trim().split(',');
+            if (args.length !== 3) {
+                outputTextarea.value += '\nInvalid PLACE command. Usage: PLACE X,Y,DIRECTION';
+            } else {
+                const x = parseInt(args[0].trim());
+                const y = parseInt(args[1].trim());
+                const direction = args[2].trim();
+                if (!bike.place(x, y, direction)) {
+                    outputTextarea.value += '\nInvalid PLACE command. Bike position must be within the 7x7 grid.';
+                }
+            }
+        } else if (command === 'FORWARD') {
+            bike.forward();
+        } else if (command === 'TURN_LEFT') {
+            bike.turnLeft();
+        } else if (command === 'TURN_RIGHT') {
+            bike.turnRight();
+        } else if (command === 'GPS_REPORT') {
+            outputTextarea.value += `\n(${bike.x}, ${bike.y}), ${bike.direction}`;
+        } else {
+            outputTextarea.value += '\nInvalid command. Available commands: PLACE, FORWARD, TURN_LEFT, TURN_RIGHT, GPS_REPORT';
+        }
+    });
+</script>
+</body>
+</html>
