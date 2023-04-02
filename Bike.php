@@ -19,7 +19,9 @@ class Bike
             $this->x = $x;
             $this->y = $y;
             $this->facing = $facing;
+            return true;
         }
+        return false;
     }
 
     private function isValidPosition($x, $y, $facing)
@@ -33,7 +35,7 @@ class Bike
         return true;
     }
 
-    public function move()
+    public function forward()
     {
         switch ($this->facing) {
             case 'NORTH':
@@ -101,16 +103,16 @@ class Bike
         }
     }
 
-    public function report()
+    public function getReport()
     {
-        echo '(' . $this->x . ', ' . $this->y . '), ' . $this->facing . PHP_EOL;
+        return '(' . $this->x . ', ' . $this->y . '), ' . $this->facing;
     }
 }
 
-// Usage Example
+// Example Usage
 $bike = new Bike();
 $bike->place(0, 5, 'NORTH');
-$bike->move();
-$bike->report();
+$bike->forward();
+echo $bike->getReport();
 
 ?>
